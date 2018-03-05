@@ -1,8 +1,9 @@
 import numpy as np
+from scipy.special import expit
 
 
 def sigmoid(x: np.ndarray):
-    return 1 / (1 + np.exp(-x))
+    return expit(x)
 
 
 def sigmoid_prime(x: np.ndarray):

@@ -1,5 +1,4 @@
 import numpy as np
-from keras.datasets import mnist
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import Dropout
@@ -8,10 +7,12 @@ from keras.layers.convolutional import Conv2D
 from keras.layers.convolutional import MaxPooling2D
 from keras.utils import np_utils
 from keras import backend as K
-from src.pre_processing import *
+from pre_processing import *
 K.set_image_dim_ordering('th')
 
-training, test = get_splits()
+#training, test = get_splits()
+training = get_training()
+test = get_test()
 X_train = np.array([x for x, y in training])
 X_test = np.array([x for x, y in test])
 y_train = np.array([y for x, y in training])
@@ -82,6 +83,6 @@ def base_cnn():
 
 
 cnn_model = base_cnn()
-cnn_model.fit(X_train, y_train_vec, validation_data=(X_test, y_test_vec), epochs=10, batch_size=200, verbose=2)
+cnn_model.fit(X_train, y_train_vec, validation_data=(X_test, y_test_vec), epochs=100, batch_size=200, verbose=2)
 scores = cnn_model.evaluate(X_test, y_test_vec, verbose=0)
 print("Baseline Error %.2f%%" % (100-scores[1]*100))

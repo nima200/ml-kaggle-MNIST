@@ -1,7 +1,8 @@
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-from skimage.filters import sobel, threshold_otsu
+from skimage.filters import sobel
+from skimage.filters import threshold_otsu
 from skimage.measure import label, regionprops
 from skimage.morphology import closing, square, watershed
 from skimage.transform import resize

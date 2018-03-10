@@ -9,8 +9,8 @@ from skimage.transform import resize
 
 
 def get_splits():
-    X = pd.read_csv('./data/train_x.csv', sep=',')
-    y = pd.read_csv('./data/train_y.csv', sep=',')
+    X = pd.read_csv('../data/train_x.csv', sep=',')
+    y = pd.read_csv('../data/train_y.csv', sep=',')
 
     X = X.as_matrix().reshape(-1, 64, 64)
     y = y.as_matrix().reshape(-1, 1)
@@ -45,8 +45,8 @@ def get_splits():
 
 
 def get_training():
-    X = pd.read_csv('./data/train_x.csv', sep=',')
-    y = pd.read_csv('./data/train_y.csv', sep=',')
+    X = pd.read_csv('../data/train_x.csv', sep=',', header=None)
+    y = pd.read_csv('../data/train_y.csv', sep=',', header=None)
 
     X = X.as_matrix().reshape(-1, 64, 64)
     y = y.as_matrix().reshape(-1, 1)
@@ -60,16 +60,14 @@ def get_training():
 
     # Each list entry in the final training data is a tuple with the first element being a 28x28 matrix for the image
     # pixels, and the second entry being a vectorized representation of the image digit classification
-    X_train = [np.reshape(x, (x.size, 1)) for x in X_train]
-    y_train = [vectorized_result(y) for y in y]
-    training_data = list(zip(X_train, y_train))
+    training_data = list(zip(X_train, y))
     return training_data
 
 
 def get_test():
-    X = pd.read_csv('./data/test_x.csv', header=None).as_matrix()
+    X = pd.read_csv('../data/test_x.csv', header=None)
 
-    X = X.reshape(-1, 64, 64)
+    X = X.as_matrix().reshape(-1, 64, 64)
 
     X_test = np.zeros(shape=(X.shape[0], 28, 28))
 
@@ -77,9 +75,6 @@ def get_test():
     for i, image in enumerate(X):
         clean_image = find_biggest_digit(image)
         X_test[i] = clean_image
-
-    # Each list entry in the final test data is a 28x28 matrix representing the image's pixel data
-    X_test = [np.reshape(x, (x.size, 1)) for x in X_test]
 
     return X_test
 

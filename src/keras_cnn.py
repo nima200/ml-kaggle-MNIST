@@ -39,12 +39,6 @@ np.random.seed(seed)
 X_train = X_train.reshape(X_train.shape[0], pixel_count).astype('float32')
 X_test = X_test.reshape(X_test.shape[0], pixel_count).astype('float32')
 
-# Normalize the inputs
-X_train = X_train / 255
-X_test = X_test / 255
-
-class_count = y_test_vec.shape[1]
-
 
 def base_nn():
     nn_model = Sequential()

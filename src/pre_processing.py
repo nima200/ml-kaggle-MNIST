@@ -44,6 +44,28 @@ def get_splits():
     return training_data, test_data
 
 
+def get_raw_training():
+    X = pd.read_csv('../data/train_x.csv', sep=',', header=None)
+    y = pd.read_csv('../data/train_y.csv', sep=',', header=None)
+    
+    X = X.as_matrix().reshape(-1, 64, 64)
+    y = y.as_matrix().reshape(-1, 1)
+    
+    X_train = np.array([resize(x, (28, 28), mode='constant') for x in X])
+    
+    training_data = list(zip(X_train, y))
+    return training_data
+
+
+def get_raw_test():
+    X = pd.read_csv('../data/test_x.csv', sep=',', header=None)
+
+    X = X.as_matrix().reshape(-1, 64, 64)
+    
+    X_test = np.array([resize(x, (28, 28), mode='constant') for x in X])
+    return X_test
+
+
 def get_training():
     X = pd.read_csv('../data/train_x.csv', sep=',', header=None)
     y = pd.read_csv('../data/train_y.csv', sep=',', header=None)
@@ -65,7 +87,7 @@ def get_training():
 
 
 def get_test():
-    X = pd.read_csv('../data/test_x.csv', header=None)
+    X = pd.read_csv('../data/test_x.csv', sep=',', header=None)
 
     X = X.as_matrix().reshape(-1, 64, 64)
 
@@ -85,8 +107,8 @@ def find_biggest_digit(image):
 
     # Create markings from areas where image is white and where it's not for segmentation
     markers = np.zeros_like(image)
-    markers[image != 255] = 1
-    markers[image == 255] = 2
+    markers[image < 250] = 1
+    markers[image >= 250] = 2
     # Apply segmentation on the elevation map using the markers
     segmentation = watershed(elevation_map, markers)
 
@@ -104,17 +126,16 @@ def find_biggest_digit(image):
         minr, minc, maxr, maxc = x.bbox
         width = maxc - minc
         height = maxr - minr
-        return width * height
+        largest_side = np.max((width, height))
+        return np.power(largest_side, 2)
 
     # Sort regions based on max bounding box area
     regions.sort(key=lambda x: get_area(x), reverse=True)
     biggest_region = regions[0]
-    final_img = biggest_region.image
+    final_img = np.zeros(shape=(image.shape[0], image.shape[1]))
+    final_img[label_image == biggest_region.label] = 255
     # Re-scale the image to a smaller size for computational efficiency
     final_img = resize(final_img, (28, 28), mode='constant')
-    # Zero out pixels that are not white, set all white pixels to 255 in value
-    final_img[final_img < 1] = 0
-    final_img[final_img == 1] = 255
 
     return final_img
 

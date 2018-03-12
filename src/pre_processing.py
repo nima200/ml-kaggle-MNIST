@@ -132,8 +132,9 @@ def find_biggest_digit(image):
     # Sort regions based on max bounding box area
     regions.sort(key=lambda x: get_area(x), reverse=True)
     biggest_region = regions[0]
-    final_img = np.zeros(shape=(image.shape[0], image.shape[1]))
-    final_img[label_image == biggest_region.label] = 255
+#     final_img = np.zeros(shape=(image.shape[0], image.shape[1]))
+#     final_img[label_image == biggest_region.label] = 255
+    final_img = biggest_region.image
     # Re-scale the image to a smaller size for computational efficiency
     final_img = resize(final_img, (28, 28), mode='constant')
 

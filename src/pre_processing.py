@@ -6,6 +6,7 @@ from skimage.filters import threshold_otsu
 from skimage.measure import label, regionprops
 from skimage.morphology import closing, square, watershed
 from skimage.transform import resize
+from skimage.util import pad
 
 
 def get_splits():
@@ -135,6 +136,7 @@ def find_biggest_digit(image):
 #     final_img = np.zeros(shape=(image.shape[0], image.shape[1]))
 #     final_img[label_image == biggest_region.label] = 255
     final_img = biggest_region.image
+    final_img = pad(final_img, pad_width=5, mode='constant')
     # Re-scale the image to a smaller size for computational efficiency
     final_img = resize(final_img, (28, 28), mode='constant')
 

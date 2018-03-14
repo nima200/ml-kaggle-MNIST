@@ -7,14 +7,15 @@ from keras.preprocessing.image import ImageDataGenerator
 def get_mnist_image_generator(X_train):
     width_shift = 0.2
     height_shift = 0.2
-    rotation = 90
-    zoom_range = [1.2, 2]
+    rotation = 45
+    zoom_range = [0.8, 1.2]
     datagen = ImageDataGenerator(
         rotation_range=rotation,
         width_shift_range=width_shift,
         height_shift_range=height_shift,
         zoom_range=zoom_range,
-        vertical_flip=True)
+        featurewise_center=True,
+        zca_whitening=True)
     datagen.fit(X_train)
     return datagen
 

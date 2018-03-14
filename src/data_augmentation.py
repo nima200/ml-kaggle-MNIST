@@ -1,10 +1,10 @@
 from keras.datasets import mnist
 import numpy as np
 import matplotlib.pyplot as plt
-from src.image import ImageDataGenerator
+from keras.preprocessing.image import ImageDataGenerator
 
 
-def get_mnist_image_generator(X_train, pool):
+def get_mnist_image_generator(X_train):
     width_shift = 0.2
     height_shift = 0.2
     rotation = 45
@@ -15,8 +15,7 @@ def get_mnist_image_generator(X_train, pool):
         height_shift_range=height_shift,
         zoom_range=zoom_range,
         featurewise_center=True,
-        zca_whitening=True,
-        pool=pool)
+        zca_whitening=True)
     datagen.fit(X_train)
     return datagen
 

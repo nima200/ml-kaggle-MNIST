@@ -19,8 +19,8 @@ def get_splits():
     # USe 10% of data for testing
     X_train, X_test, y_train, y_test = train_test_split(X, y, shuffle=True, test_size=0.10)
 
-    X_train_new = np.zeros(shape=(X_train.shape[0], 28, 28))
-    X_test_new = np.zeros(shape=(X_test.shape[0], 28, 28))
+    X_train_new = np.zeros(shape=(X_train.shape[0], 64, 64))
+    X_test_new = np.zeros(shape=(X_test.shape[0], 64, 64))
 
     # Find the biggest digit in the image and separate it into a new matrix array
     for i, image in enumerate(X_train):
@@ -31,13 +31,13 @@ def get_splits():
         clean_image = find_biggest_digit(image)
         X_test_new[i] = clean_image
 
-    # Each list entry in the final training data is a tuple with the first element being a 28x28 matrix for the image
+    # Each list entry in the final training data is a tuple with the first element being a 64x64 matrix for the image
     # pixels, and the second entry being a vectorized representation of the image digit classification
     X_train_new = [np.reshape(x, (x.size, 1)) for x in X_train_new]
     y_train = [vectorized_result(y) for y in y_train]
     training_data = list(zip(X_train_new, y_train))
 
-    # Each list entry in the final test data is a tuple with the first element being a 28x28 matrix for the image
+    # Each list entry in the final test data is a tuple with the first element being a 64x64 matrix for the image
     # pixels, and the second entry being a scalar value for the image digit classification
     X_test_new = [np.reshape(x, (x.size, 1)) for x in X_test_new]
     test_data = list(zip(X_test_new, y_test))
@@ -52,9 +52,7 @@ def get_raw_training():
     X = X.as_matrix().reshape(-1, 64, 64)
     y = y.as_matrix().reshape(-1, 1)
     
-    X_train = np.array([resize(x, (28, 28), mode='constant') for x in X])
-    
-    training_data = list(zip(X_train, y))
+    training_data = list(zip(X, y))
     return training_data
 
 
@@ -63,7 +61,7 @@ def get_raw_test():
 
     X = X.as_matrix().reshape(-1, 64, 64)
     
-    X_test = np.array([resize(x, (28, 28), mode='constant') for x in X])
+    X_test = np.array([resize(x, (64, 64), mode='constant') for x in X])
     return X_test
 
 
@@ -74,7 +72,7 @@ def get_training():
     X = X.as_matrix().reshape(-1, 64, 64)
     y = y.as_matrix().reshape(-1, 1)
 
-    X_train = np.zeros(shape=(X.shape[0], 28, 28))
+    X_train = np.zeros(shape=(X.shape[0], 64, 64))
 
     # Find the biggest digit in the image and separate it into a new matrix array
     for i, image in enumerate(X):
@@ -92,7 +90,7 @@ def get_test():
 
     X = X.as_matrix().reshape(-1, 64, 64)
 
-    X_test = np.zeros(shape=(X.shape[0], 28, 28))
+    X_test = np.zeros(shape=(X.shape[0], 64, 64))
 
     # Find the biggest digit in the image and separate it into a new matrix array
     for i, image in enumerate(X):
@@ -136,9 +134,9 @@ def find_biggest_digit(image):
 #     final_img = np.zeros(shape=(image.shape[0], image.shape[1]))
 #     final_img[label_image == biggest_region.label] = 255
     final_img = biggest_region.image
-    final_img = pad(final_img, pad_width=5, mode='constant')
+    final_img = pad(final_img, pad_width=3, mode='constant')
     # Re-scale the image to a smaller size for computational efficiency
-    final_img = resize(final_img, (28, 28), mode='constant')
+    final_img = resize(final_img, (64, 64), mode='constant')
 
     return final_img
 

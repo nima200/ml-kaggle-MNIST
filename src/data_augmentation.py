@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from src.image import ImageDataGenerator
 
 
-def get_mnist_image_generator(X_train):
+def get_mnist_image_generator(X_train, pool):
     width_shift = 0.2
     height_shift = 0.2
     rotation = 45
@@ -15,7 +15,8 @@ def get_mnist_image_generator(X_train):
         height_shift_range=height_shift,
         zoom_range=zoom_range,
         featurewise_center=True,
-        zca_whitening=True)
+        zca_whitening=True,
+        pool=pool)
     datagen.fit(X_train)
     return datagen
 

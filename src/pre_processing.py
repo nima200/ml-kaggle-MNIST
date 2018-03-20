@@ -9,6 +9,7 @@ from skimage.transform import resize
 from skimage.util import pad
 URL_ENDPOINT = "http://cs.mcgill.ca/~ksinha4/datasets/kaggle/"
 
+
 def get_splits():
     X = pd.read_csv(URL_ENDPOINT + 'train_x.csv', sep=',')
     y = pd.read_csv(URL_ENDPOINT + 'train_y.csv', sep=',')
@@ -84,6 +85,7 @@ def get_training():
     training_data = list(zip(X_train, y))
     return training_data
 
+
 def get_training_local():
     X = pd.read_csv('../data/train_x.csv', sep=',',header=None)
     y = pd.read_csv('../data/train_y.csv', sep=',',header=None)
@@ -102,6 +104,7 @@ def get_training_local():
     # pixels, and the second entry being a vectorized representation of the image digit classification
     training_data = list(zip(X_train, y))
     return training_data
+
 
 def get_training_small():
     X = pd.read_csv(URL_ENDPOINT + 'train_x.csv', sep=',',header=None)
@@ -122,6 +125,7 @@ def get_training_small():
     training_data = list(zip(X_train, y))
     return training_data
 
+
 def get_test():
     X = pd.read_csv(URL_ENDPOINT + 'test_x.csv', sep=',', header=None)
 
@@ -135,6 +139,7 @@ def get_test():
         X_test[i] = clean_image
 
     return X_test
+
 
 def get_test_local():
     X = pd.read_csv('../data/test_x.csv', sep=',', header=None)
@@ -150,6 +155,7 @@ def get_test_local():
 
     return X_test
 
+
 def get_test_small():
     X = pd.read_csv(URL_ENDPOINT + 'test_x.csv', sep=',', header=None)
 
@@ -162,6 +168,7 @@ def get_test_small():
         clean_image = find_biggest_digit_small(image)
         X_test[i] = clean_image
     return X_test
+
 
 def find_biggest_digit(image):
     # Create the elevation map using the sobel filter
@@ -194,14 +201,13 @@ def find_biggest_digit(image):
     # Sort regions based on max bounding box area
     regions.sort(key=lambda x: get_area(x), reverse=True)
     biggest_region = regions[0]
-#     final_img = np.zeros(shape=(image.shape[0], image.shape[1]))
-#     final_img[label_image == biggest_region.label] = 255
     final_img = biggest_region.image
     final_img = pad(final_img, pad_width=3, mode='constant')
     # Re-scale the image to a smaller size for computational efficiency
     final_img = resize(final_img, (64, 64), mode='constant')
     # Attempting to not extract largest 
     return final_img
+
 
 def find_biggest_digit_small(image):
     # Create the elevation map using the sobel filter
@@ -234,8 +240,6 @@ def find_biggest_digit_small(image):
     # Sort regions based on max bounding box area
     regions.sort(key=lambda x: get_area(x), reverse=True)
     biggest_region = regions[0]
-#     final_img = np.zeros(shape=(image.shape[0], image.shape[1]))
-#     final_img[label_image == biggest_region.label] = 255
     final_img = biggest_region.image
     final_img = pad(final_img, pad_width=5, mode='constant')
     # Re-scale the image to a smaller size for computational efficiency
